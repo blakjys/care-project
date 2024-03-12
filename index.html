@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supplement Recommender</title>
+    <script src="https://cdn.jsdelivr.net/npm/@openai/gpt-3-browser@1.0.0/dist/openai-gpt-3-browser.js"></script>
+</head>
+<body>
+    <h1>Supplement Recommender</h1>
+
+    <form id="healthForm">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br><br>
+        
+        <label for="gender">Gender:</label>
+        <select id="gender" name="gender" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select><br><br>
+
+        <label for="healthCondition">Health Condition:</label>
+        <input type="text" id="healthCondition" name="healthCondition" required><br><br>
+
+        <label for="lifestyle">Lifestyle:</label>
+        <input type="text" id="lifestyle" name="lifestyle" required><br><br>
+
+        <button type="submit">Get Supplement Recommendations</button>
+    </form>
+
+    <div id="recommendation"></div>
+
+    <script>
+        // 영양제 추천 알고리즘을 GPT를 활용하여 구현
+        document.getElementById("healthForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const age = parseInt(document.getElementById("age").value);
+            const gender = document.getElementById("gender").value;
+            const healthCondition = document.getElementById("healthCondition").value;
+            const lifestyle = document.getElementById("lifestyle").value;
+
+            // GPT를 초기화하고 영양제 추천을 요청
+            const gpt = new OpenAI.GPT(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);
+            const prompt = `The user is a ${age}-year-old ${gender} with ${healthCondition} and ${lifestyle}. Recommend nutritional supplements.`;
+            gpt.complete(prompt)
+                .then((result) => {
+                    const recommendations = result.choices[0].text.trim();
+                    document.getElementById("recommendation").innerHTML = "<h2>Recommended Supplements:</h2>" + recommendations;
+                })
+                .catch((err) => {
+                    console.error('Failed to generate recommendations:', err);
+                    document.getElementById("recommendation").innerHTML = "<p>Error: Failed to generate recommendations. Please try again later.</p>";
+                });
+        });
+    </script>
+</body>
+</html>
