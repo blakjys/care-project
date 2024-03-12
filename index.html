@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supplement Recommender</title>
+    <title>영양제 추천</title>
     <script src="https://cdn.jsdelivr.net/npm/@openai/gpt-3-browser@1.0.0/dist/openai-gpt-3-browser.js"></script>
 </head>
 <body>
-    <h1>Supplement Recommender</h1>
+    <h1>영양제 추천</h1>
 
     <form id="healthForm">
-        <label for="age">Age:</label>
+        <label for="age">나이:</label>
         <input type="number" id="age" name="age" required><br><br>
         
-        <label for="gender">Gender:</label>
+        <label for="gender">성별:</label>
         <select id="gender" name="gender" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
         </select><br><br>
 
-        <label for="healthCondition">Health Condition:</label>
+        <label for="healthCondition">현재 증상:</label>
         <input type="text" id="healthCondition" name="healthCondition" required><br><br>
 
-        <label for="lifestyle">Lifestyle:</label>
+        <label for="lifestyle">생활 습관:</label>
         <input type="text" id="lifestyle" name="lifestyle" required><br><br>
 
-        <button type="submit">Get Supplement Recommendations</button>
+        <button type="submit">영양제 추천 받기</button>
     </form>
 
     <div id="recommendation"></div>
@@ -40,16 +40,17 @@
             const lifestyle = document.getElementById("lifestyle").value;
 
             // GPT를 초기화하고 영양제 추천을 요청
-            const gpt = new OpenAI.GPT(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);
-            const prompt = `The user is a ${age}-year-old ${gender} with ${healthCondition} and ${lifestyle}. Recommend nutritional supplements.`;
+            const gpt = new OpenAI.GPT("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");
+            const prompt = `${age}세 ${gender}이며, ${healthCondition} 상태이고 ${lifestyle} 생활 방식입니다. 영양제를 추천해주세요.`;
             gpt.complete(prompt)
                 .then((result) => {
                     const recommendations = result.choices[0].text.trim();
-                    document.getElementById("recommendation").innerHTML = "<h2>Recommended Supplements:</h2>" + recommendations;
+                    // 추천 결과를 결과 영역에 추가
+                    document.getElementById("recommendation").innerHTML = "<h2>추천된 영양제:</h2>" + recommendations;
                 })
                 .catch((err) => {
-                    console.error('Failed to generate recommendations:', err);
-                    document.getElementById("recommendation").innerHTML = "<p>Error: Failed to generate recommendations. Please try again later.</p>";
+                    console.error('추천 생성에 실패했습니다:', err);
+                    document.getElementById("recommendation").innerHTML = "<p>오류: 추천 생성에 실패했습니다. 나중에 다시 시도해주세요.</p>";
                 });
         });
     </script>
